@@ -1,6 +1,6 @@
-package com.gientech.bigevent.service;
+package com.gientech.bigevent.business.service;
 
-import com.gientech.bigevent.pojo.User;
+import com.gientech.bigevent.business.pojo.User;
 
 /**
  * @author aimintang
@@ -13,4 +13,10 @@ public interface UserService {
 
     //用户注册
     void register(String username, String password);
+
+    void update(User user);
+
+    void updateAvatar(String avatarUrl);
+
+    void updatePwd(String newPwd);
 }

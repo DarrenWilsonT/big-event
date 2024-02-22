@@ -4,3 +4,16 @@ spring:
     url: jdbc:mysql://localhost:3306/big_event
     username: root
     password: root
+gientech:
+  security:
+    jwt:
+      effective-time: 1000 * 60 * 60 * 12
+      secret: gientech
+    path:
+      permit:
+        - /user/login
+        - /user/register
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true

@@ -1,6 +1,6 @@
-package com.gientech.bigevent.exception;
+package com.gientech.bigevent.framework.exception;
 
-import com.gientech.bigevent.pojo.Result;
+import com.gientech.bigevent.business.pojo.Result;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

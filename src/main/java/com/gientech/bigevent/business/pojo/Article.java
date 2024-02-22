@@ -1,4 +1,4 @@
-package com.gientech.bigevent.pojo;
+package com.gientech.bigevent.business.pojo;
 
 
 import lombok.Data;

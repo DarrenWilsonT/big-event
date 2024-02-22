@@ -1,4 +1,4 @@
-package com.gientech.bigevent.utils;
+package com.gientech.bigevent.framework.utils;
 
 
 import java.security.MessageDigest;
