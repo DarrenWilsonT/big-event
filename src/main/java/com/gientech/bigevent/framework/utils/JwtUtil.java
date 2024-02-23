@@ -16,13 +16,13 @@ public class JwtUtil {
     public static String genToken(Map<String, Object> claims) {
         return JWT.create()
                 .withClaim("claims", claims)
-                .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConfig.jwtEffectiveTime))
-                .sign(Algorithm.HMAC256(SecurityConfig.jwtSecret));
+                .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConfig.Jwt.getEffectiveTime()))
+                .sign(Algorithm.HMAC256(SecurityConfig.Jwt.getSecret()));
     }
 
     //接收token,验证token,并返回业务数据
     public static Map<String, Object> parseToken(String token) {
-        return JWT.require(Algorithm.HMAC256(SecurityConfig.jwtSecret))
+        return JWT.require(Algorithm.HMAC256(SecurityConfig.Jwt.getSecret()))
                 .build()
                 .verify(token)
                 .getClaim("claims")

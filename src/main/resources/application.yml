@@ -7,7 +7,7 @@ spring:
 gientech:
   security:
     jwt:
-      effective-time: 1000 * 60 * 60 * 12
+      effective-time: 43200000
       secret: gientech
     path:
       permit:

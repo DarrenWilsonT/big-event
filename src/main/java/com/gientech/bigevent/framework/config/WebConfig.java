@@ -15,15 +15,17 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     private final LoginInterceptor loginInterceptor;
+    private final SecurityConfig securityConfig;
 
-    public WebConfig(LoginInterceptor loginInterceptor) {
+    public WebConfig(LoginInterceptor loginInterceptor, SecurityConfig securityConfig) {
         this.loginInterceptor = loginInterceptor;
+        this.securityConfig = securityConfig;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 登录接口和注册接口不拦截
-        List<String> pathPermit = SecurityConfig.pathPermit;
+        List<String> pathPermit = securityConfig.getPath().getPermit();
         registry.addInterceptor(loginInterceptor).excludePathPatterns(pathPermit.toArray(new String[0]));
     }
 }

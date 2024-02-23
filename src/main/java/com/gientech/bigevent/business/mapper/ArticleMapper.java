@@ -4,6 +4,8 @@ import com.gientech.bigevent.business.pojo.Article;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * @author aimintang
  * @date 2024/2/22
@@ -14,4 +16,6 @@ public interface ArticleMapper {
     @Insert("insert into article(title, content, cover_img, create_user, create_time, update_time)" +
             " values(#{title}, #{content}, #{coverImg}, #{createUser}, #{createTime}, #{updateTime})")
     void add(Article article);
+
+    List<Article> listArticle(Integer categoryId, String state, Integer userId);
 }

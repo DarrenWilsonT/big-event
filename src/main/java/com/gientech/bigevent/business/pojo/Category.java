@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  */
 @Data
 public class Category {
-    @NotNull(groups = Add.class)
+    @NotNull(groups = Update.class)
     private Integer id;//主键ID
 
     @NotEmpty
