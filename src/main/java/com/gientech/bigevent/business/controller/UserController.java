@@ -8,6 +8,8 @@ import com.gientech.bigevent.framework.utils.Md5Util;
 import com.gientech.bigevent.framework.utils.ThreadLocalUtil;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,9 +36,11 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final StringRedisTemplate stringRedisTemplate;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, StringRedisTemplate stringRedisTemplate) {
         this.userService = userService;
+        this.stringRedisTemplate = stringRedisTemplate;
     }
 
     @PostMapping(value = "/register")
@@ -57,7 +62,7 @@ public class UserController {
                 Map<String, Object> claims = new HashMap<>();
                 claims.put("id", loginUser.getId());
                 claims.put("username", loginUser.getUsername());
-                String token = JwtUtil.genToken(claims);
+                String token = JwtUtil.genToken(claims, stringRedisTemplate);
 
                 return Result.success(token);
             } else {
@@ -90,7 +95,7 @@ public class UserController {
     }
 
     @PatchMapping(value = "/updatePwd")
-    public Result updatePwd(@RequestBody Map<String, String> params) {
+    public Result updatePwd(@RequestBody Map<String, String> params, @RequestHeader("Authorization") String token) {
         String oldPwd = params.get("old_pwd");
         String newPwd = params.get("new_pwd");
         String repeatPwd = params.get("repeat_pwd");
@@ -105,6 +110,9 @@ public class UserController {
             } else if (!newPwd.equals(repeatPwd)) {
                 return Result.error("两次输入的密码不一致");
             } else {
+                ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
+                valueOperations.getAndDelete(token);
+                
                 userService.updatePwd(newPwd);
                 return Result.success();
             }

@@ -5,14 +5,21 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
 class BigEventApplicationTests {
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
     @Test
     public void testTokenGenerator() {
         Map<String, Object> claims = new HashMap<>();
@@ -37,6 +44,23 @@ class BigEventApplicationTests {
 
 //        decodedJWT.getClaim("user").asMap();
         System.out.println(decodedJWT.getClaim("user").asMap());
+    }
+
+    @Test
+    public void redisSetTest() {
+        ValueOperations<String, String> operations = redisTemplate.opsForValue();
+        operations.set("key", "value", 3, TimeUnit.SECONDS);
+//        operations.getAndDelete("key");
+        operations.getOperations().delete("key");
+
+        System.out.println(operations.get("key"));
+    }
+
+    @Test
+    public void redisGetTest() {
+        ValueOperations<String, String> operations = redisTemplate.opsForValue();
+
+        System.out.println(operations.get("key"));
     }
 
 }
